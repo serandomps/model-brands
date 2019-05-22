@@ -1,0 +1,2 @@
+
+exports.service = require('./service');

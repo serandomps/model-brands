@@ -1,0 +1,15 @@
+{
+    "name": "vehicle-makes",
+    "description": "vehicle-makes component",
+    "scripts": [
+        "index.js",
+        "service/index.js"
+    ],
+    "styles": [],
+    "templates": [],
+    "main": "index.js",
+    "dependencies": {
+        "serandomps/serand": "master",
+        "serandomps/utils": "master"
+    }
+}
