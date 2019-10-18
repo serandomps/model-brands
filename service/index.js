@@ -33,17 +33,15 @@ module.exports.find = function (done) {
         return done(null, makes);
     }
     utils.sync('vehicle-makes:find', function (ran) {
-        $.ajax({
-            method: 'GET',
-            url: utils.resolve('autos:///apis/v/vehicle-makes'),
-            dataType: 'json',
-            success: function (data) {
-                makes = data;
-                ran(null, makes);
-            },
-            error: function (xhr, status, err) {
-                ran(err || status || xhr);
+        var next = utils.resolve('autos:///apis/v/vehicle-makes' + utils.data({
+            count: 100
+        }));
+        utils.all(next, function (err, o) {
+            if (err) {
+                return ran(err);
             }
+            makes = _.sortBy(o, 'title');
+            ran(null, makes);
         });
     }, done);
 };
