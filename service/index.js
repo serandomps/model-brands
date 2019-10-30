@@ -39,9 +39,10 @@ exports.find = function (done) {
         if (err) {
             return done(err);
         }
-        makes = m;
+        makes = _.sortBy(m, 'title');
         m.forEach(function (make) {
             makesById[make.id] = make;
+            make.models = _.sortBy(make.models, 'title');
             var models = make.models;
             models.forEach(function (model) {
                 modelsById[model.id] = model;
