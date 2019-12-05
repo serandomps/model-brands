@@ -1,6 +1,6 @@
 {
-    "name": "vehicle-makes",
-    "description": "vehicle-makes component",
+    "name": "mode-vehicle-makes",
+    "description": "model-vehicle-makes component",
     "scripts": [
         "index.js",
         "service/index.js"
