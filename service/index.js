@@ -4,6 +4,20 @@ var makes;
 var makesById = {};
 var modelsById = {};
 
+var otherFix = function (entries) {
+    var i;
+    var length = entries.length;
+    var other;
+    for (i = 0; i < length; i++) {
+        if (entries[i].title === 'Other') {
+            other = entries.splice(i, 1)[0];
+            break;
+        }
+    }
+    entries.push(other);
+    return entries;
+}
+
 exports.findModel = function (id, done) {
     exports.find(function (err) {
         if (err) {
@@ -39,10 +53,10 @@ exports.find = function (done) {
         if (err) {
             return done(err);
         }
-        makes = _.sortBy(m, 'title');
+        makes = otherFix(_.sortBy(m, 'title'));
         m.forEach(function (make) {
             makesById[make.id] = make;
-            make.models = _.sortBy(make.models, 'title');
+            make.models = otherFix(_.sortBy(make.models, 'title'));
             var models = make.models;
             models.forEach(function (model) {
                 modelsById[model.id] = model;
