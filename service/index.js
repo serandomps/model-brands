@@ -1,7 +1,7 @@
 var utils = require('utils');
 
-var makes;
-var makesById = {};
+var brands = {};
+var brandsById = {};
 var modelsById = {};
 
 var otherFix = function (entries) {
@@ -18,8 +18,8 @@ var otherFix = function (entries) {
     return entries;
 }
 
-exports.findModel = function (id, done) {
-    exports.find(function (err) {
+exports.findModel = function (model, id, done) {
+    exports.find(model, function (err) {
         if (err) {
             return done(err);
         }
@@ -27,41 +27,41 @@ exports.findModel = function (id, done) {
     });
 };
 
-exports.findModels = function (id, done) {
-    exports.findOne(id, function (err, make) {
+exports.findModels = function (model, id, done) {
+    exports.findOne(model, id, function (err, brand) {
         if (err) {
             return done(err);
         }
-        done(null, make.models);
+        done(null, brand.models);
     });
 };
 
-exports.findOne = function (id, done) {
-    exports.find(function (err) {
+exports.findOne = function (model, id, done) {
+    exports.find(model, function (err) {
         if (err) {
             return done(err);
         }
-        done(null, makesById[id]);
+        done(null, brandsById[id]);
     });
 };
 
-exports.find = function (done) {
-    if (makes) {
-        return done(null, makes);
+exports.find = function (model, done) {
+    if (brands[model]) {
+        return done(null, brands[model]);
     }
-    utils.configs('vehicle-makes', function (err, m) {
+    utils.configs('brands-' + model, function (err, brandz) {
         if (err) {
             return done(err);
         }
-        makes = otherFix(_.sortBy(m, 'title'));
-        m.forEach(function (make) {
-            makesById[make.id] = make;
-            make.models = otherFix(_.sortBy(make.models, 'title'));
-            var models = make.models;
+        brandz.forEach(function (brand) {
+            brandsById[brand.id] = brand;
+            brand.models = otherFix(_.sortBy(brand.models, 'title'));
+            var models = brand.models;
             models.forEach(function (model) {
                 modelsById[model.id] = model;
             });
         });
-        done(null, makes);
+        brands[model] = otherFix(_.sortBy(brandz, 'title'));
+        done(null, brands[model]);
     });
 };
